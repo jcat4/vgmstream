@@ -46,6 +46,32 @@ Put the following files somewhere Windows can find them:
 For Winamp/XMPlay/command line this means in the directory with the main .exe,
 or in a system directory, or any other directory in the PATH variable.
 
+## Building the CLI on Mac OS
+
+First, install [homebrew](https://brew.sh/), a package manager that will let us easily install our other dependencies.
+
+Once homebrew is installed, install the following dependencies using `brew`:
+
+```
+brew install audacious
+brew install gtk+
+```
+
+Once all the dependencies are installed, `cd` to the root of the directory where you cloned/downloaded the repo and build the CLI:
+
+```
+cd /path/to/vgmstream
+make vgmstream_cli
+```
+
+The executable will build out to **cli/vgmstream-cli**.
+You can now execute it via command line with `./vgmstream-cli`!
+
+In the following usage examples, substitute `text.exe` with `./vgmstream-cli`.
+
+For example:
+- ~~`test.exe -o happy.wav happy.adx`~~
+- `./vgmstream-cli -o happy.wav happy.adx`
 
 ## Components
 
@@ -53,7 +79,7 @@ or in a system directory, or any other directory in the PATH variable.
 *Installation*: unzip the file and follow the above instructions for installing
 the other files needed.
 
-Converts playable files to wav. Typical usage would be: 
+Converts playable files to wav. Typical usage would be:
 - `test.exe -o happy.wav happy.adx` to decode `happy.adx` to `happy.wav`.
 
 If command-line isn't your thing you can also drag and drop files to the
@@ -63,7 +89,7 @@ There are multiple options that alter how the file is converted, for example:
 - `test.exe -m -o file.wav file.adx`: print info but don't decode
 - `test.exe -i -o file.wav file.hca`: convert without looping
 - `test.exe -s 2 -F -o file.wav file.fsb`: play 2nd subsong + ending after 2.0 loops
-- `test.exe -l 3.0 -f 5.0 -d 3.0 -o file.wav file.wem`: 3 loops, 3s delay, 5s fade 
+- `test.exe -l 3.0 -f 5.0 -d 3.0 -o file.wav file.wem`: 3 loops, 3s delay, 5s fade
 
 Available commands are printed when run with no flags. Note that you can also
 achieve similar results for other plugins using TXTP, described later.
@@ -173,7 +199,7 @@ played, making renaming is unnecessary (may need to adjust plugin priority in
 player's options).
 
 Also be aware that some plugins can tell the player they handle some extension,
-then not actually play it. This makes the file unplayable as vgmstream doesn't 
+then not actually play it. This makes the file unplayable as vgmstream doesn't
 even get the chance to parse that file, so you may need to disable the offending
 plugin or rename the file (for example this may happen with .asf and foobar).
 
@@ -217,7 +243,7 @@ and use those as needed and must be together, even if only one of the two
 will be used to play.
 
 .pos is a small file with 32 bit little endian values: loop start sample
-and  loop end sample. For FFmpeg formats (.vgmstream.pos) it may optionally 
+and  loop end sample. For FFmpeg formats (.vgmstream.pos) it may optionally
 have total samples after those.
 
 ### Decryption keys
@@ -243,11 +269,11 @@ Those can be played using an artificial header with info vgmstream needs.
 **GENH**: a byte header placed right before the original data, modyfing it.
 The resulting file must be (name).genh. Contains static header data.
 Programs like VGMToolbox can help to create GENH.
-  
+
 **TXTH**: a text header placed in an external file. The TXTH must be named
 `.txth` or `.(ext).txth` (for the whole folder), or `(name.ext).txth` (for a
 single file). Contains dynamic text commands to read data from the original
-file, or static values. 
+file, or static values.
 
 *TXTH* is recomended over *GENH* as it's far easier to create and has many
 more functions.
@@ -255,7 +281,7 @@ more functions.
 
 For files that already play, sometimes they are used by the game in various
 complex and non-standard ways, like playing multiple small songs as a single
-one, or using some channels as a section of the song. For those cases we 
+one, or using some channels as a section of the song. For those cases we
 can use create a *TXTP* file.
 
 **TXTP**: a text player configurator named `(name).txtp`. Text inside can
@@ -273,7 +299,7 @@ Since vgmstream supports a huge amount of formats it's possibly that some of
 them are also supported in other plugins, and this sometimes causes conflicts.
 If a file that should isn't playing or looping, first make sure vgmstream is
 really opening it (should show "VGMSTREAM" somewhere in the file info), and
-try to remove a few other plugins. 
+try to remove a few other plugins.
 
 foobar's FFmpeg plugin and foo_adpcm are known to cause issues, but in
 recent versions (1.4.x) you can configure plugin priority.
@@ -355,7 +381,7 @@ enabled in preferences):
 # @replaygain_album_gain N.NN dB
 # @replaygain_album_peak N.NNN
 ```
-  
+
 If your player isn't picking tags make sure vgmstream is detecting the song
 (as other plugins can steal its extensions, see above), .m3u is properly
 named and that filenames inside match the song filename. For Winamp you need
